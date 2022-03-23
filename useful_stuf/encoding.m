@@ -19,6 +19,6 @@ function output = encoding(a,b,e,x,base)
     
     % Encoding of x
     z = ((x-a)/(b-a))*(2^k -1);
-    binary_encoding = dec2base(round(z),base);
+    output = dec2base(round(z),base);
 
 end
