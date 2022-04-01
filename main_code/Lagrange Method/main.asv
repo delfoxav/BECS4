@@ -1,0 +1,18 @@
+%% Cleaning the Workspace
+Clear all;
+Close all;
+hold off;
+
+%% Definition of the Function to optimize
+% x = TOBECOMPLETED
+% y = TOBECOMPLETED
+% z = TOBECOMPLETED
+price_func = @(x,y,z) 87.6 + 6.41*x + 2.53*y + 9.29*z + 3.39*x^2 - 16.64*y^2 -4.84*z^2 - 3.43*x*y - 3.63*y*z
+
+%% Definition of the Constraints
+% Temperature has to be between 30 and 60
+% So Temp <= 60, then we can write Temp - 60 + a^2 = 0 for the first
+% condition and consider a as another variable to minimise
+Temp_constraint_1 = @(y,a) y - 60 + a.^2
+% for the second condition, we have Temp >= 30, then we can write Temp + 60
+% + b^2 = 0
