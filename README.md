@@ -31,3 +31,7 @@ y = Température
 z = Concentration du réactif
 
 ATTENTION les inputs doivent être centrés entre -1 et 1
+
+rendement_func = @(x,y,z) 91.99 + 2.81.*x+ -1.099.*y +2.81.*z - 7.99.*x.*x - 16.64.*y.*y -7.99.*z.*z  - 5.34 .*x.*y - 5.34 .* y .* z
+cout = @(x,y,z) 10 .* (3-(1-x).*3/2) + 0.2 .* (60-(1-y)*30/2) + 22.*(3-(1-z).*3/2)
+
