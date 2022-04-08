@@ -1,4 +1,8 @@
-function [value,N_bits] = population(n, lowerLimits, higherLimits, precisions)
+function [value,N_genes] = population(n, lowerLimits, higherLimits, precisions)
+%% Function to compute the initial population for the genetic algoritm
+% return a Matrix of size n*m where m is the number of genes of each
+% individual of the population of size n
+
     % n = population size
     % lowerLimits = vector of lower bounds on the differents variables
     % higherLimits = vector of higher bounds on the different variables
@@ -39,21 +43,21 @@ function [value,N_bits] = population(n, lowerLimits, higherLimits, precisions)
     end
         
     
-    % In order to determine how many bits we need, we have to use the desired
+    % In order to determine how many genes we need, we have to use the desired
     % range and precision of each variable.
     
     
     % We can then use the formula: 2^(m-1) < (upper limit - lower limit)*10^p <
-    % 2^m-1 where m is the number of bits and p the desired precision (2) to
-    % determine how many bits we need for each variable.
+    % 2^m-1 where m is the number of genes and p the desired precision to
+    % determine how many genes we need for each variable.
     
-    % Determination of the number of bits for each variable
-    N_bits = zeros(size(lowerLimits));
+    % Determination of the number of genes for each variable
+    N_genes = zeros(size(lowerLimits));
     for i=1:length(lowerLimits)
-        N_bits(i)=round((log2((higherLimits(i)-lowerLimits(i))*10^precisions(i))+1 + log2((higherLimits(i)-lowerLimits(i))*10^precisions(i)+1))/2);
+        N_genes(i)=round((log2((higherLimits(i)-lowerLimits(i))*10^precisions(i))+1 + log2((higherLimits(i)-lowerLimits(i))*10^precisions(i)+1))/2);
     end
-    Total_N_bits = sum(N_bits);
+    Total_N_genes = sum(N_genes);
 
-    value = round(rand(n,Total_N_bits)); 
+    value = round(rand(n,Total_N_genes)); 
 
 end
