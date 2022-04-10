@@ -8,7 +8,32 @@ function [value1, value2] = selection(P,F,p,e,use_GPU)
 % p = population size
 % e = number of elite individuals to select for the next generation
 % use_GPU = define if the computation has to be performed using the GPU
-    
+
+% Checks the type of the inputs
+    if ~isnumeric(P)
+        error("P : Double expected but %s was given ",class(P));
+    end
+    if ~isnumeric(F)
+        error("F : Double expected but %s was given ",class(F));
+    end
+    if ~isnumeric(p)
+        error("p : Double expected but %s was given ",class(p));
+    end
+    if ~isnumeric(e)
+        error("e : Double expected but %s was given ",class(e));
+    end
+    if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
+    end
+
+% Checks if p and e are positive or null
+if p<=0
+    error("population size must be higher than 0");
+end
+if e <0
+    error("e cannot be lower than 0");
+end
+
 % if the GPU is used create GPU arrays, preallocation 
 [X, Y] = size(P);
 if use_GPU

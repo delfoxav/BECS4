@@ -15,23 +15,32 @@ function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricef
         error("P : Double expected but %s was given ",class(P))
     end
     if ~isnumeric(lowerLimits)
-        error("lowerLimits : Double expected but %s was given ",class(lowerLimits))
+        error("lowerLimits : Double expected but %s was given ",class(lowerLimits));
     end
     if ~isnumeric(higherLimits)
-        error("higherLimits : Double expected but %s was given ",class(higherLimits))
+        error("higherLimits : Double expected but %s was given ",class(higherLimits));
     end
     if ~isnumeric(genes)
-        error("genes : Double expected but %s was given ",class(genes))
+        error("genes : Double expected but %s was given ",class(genes));
     end
     if ~isa(objfunc,'function_handle')
-        error("objfunc : function handle expected but %s was given " ,class(objfunc))
+        error("objfunc : function handle expected but %s was given " ,class(objfunc));
+    end
+    if ~isa(pricefunc,'function_handle')
+        error("pricefunc : function handle expected but %s was given " ,class(pricefunc));
+    end
+    if ~isa(yieldfunc,'function_handle')
+        error("yieldfunc : function handle expected but %s was given " ,class(yieldfunc));
+    end
+    if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
     end
 
     % Checks if each vector has the same size
     if length(lowerLimits) ~= length(higherLimits) || length(higherLimits) ...
-            ~= length(precisions) || length(precisions) ~= length(lowerLimits)
-        error("Lowerlimts (%d) , Higherlimits (%d) and precisions (%d) must have the same sizes.", ...
-            length(lowerLimits), length(higherLimits), length(precisions))
+            ~= length(genes) || length(genes) ~= length(lowerLimits)
+        error("Lowerlimts (%d) , Higherlimits (%d) and genes (%d) must have the same sizes.", ...
+            length(lowerLimits), length(higherLimits), length(genes));
     end
     
     % Checks if the lowerLimits is lower than the higherLimits, the type of
@@ -40,17 +49,13 @@ function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricef
 
         if lowerLimits(i) >= higherLimits(i)
             error("A lower limit (%d) is higher than a higher limit (%d). Please correct this issue", ...
-                lowerLimits(i), higherLimits(i))
+                lowerLimits(i), higherLimits(i));
         end
-        if precisions(i) <= 0
-            error("Precisions must be higher than 0.")
+        if genes(i) <= 0
+            error("genes must be higher than 0.");
         end
     end
-        
-
-
-
-
+     
     [x1, y1] = size(P);
     if use_GPU
         H = gpuArray(zeros(1,x1));

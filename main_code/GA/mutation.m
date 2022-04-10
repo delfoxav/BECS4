@@ -6,6 +6,25 @@ function value = mutation(P, n, use_GPU)
 % n = number of genes to be mutated
 % use_GPU = define if the computation has to be performed using the GPU
 
+
+% Checks the type of the inputs
+    if ~isnumeric(P)
+        error("P : Double expected but %s was given ",class(P));
+    end
+    if ~isnumeric(n)
+        error("n : Double expected but %s was given ",class(n));
+    end
+    if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
+    end
+
+% Checks if n is positve
+    if n<0
+        error("n : must be positve")
+    end
+
+
+
 [population_size, nb_of_genes] = size(P);
 
 % if the GPU is used create GPU arrays, preallocation 

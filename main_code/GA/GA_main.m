@@ -7,11 +7,11 @@ close all;
 clc
 
 %-----------------------------------------------------------------------
-p = 10000; % population size
-c = 200; % number of pair of chromosomes to be crossovered
-m = 100; % number of pair of chromosomes to be mutated
-e = 2; % number of elite individuals to select at each generation
-total_generations = 50000; % total number of generations
+p = 500; % population size
+c = 10; % number of pair of chromosomes to be crossovered
+m = 5; % number of pair of chromosomes to be mutated
+e = 1; % number of elite individuals to select at each generation
+total_generations = 5000; % total number of generations
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1];
 precisions = [4,4,4];
@@ -40,14 +40,14 @@ for i = 1:total_generations
     P(p+2*c+1:p+2*c+m,:) = Mu;
     E = evaluation(P,lowerLimits,higherLimits,genes,@objective_function,@price_function,@yield_check_function,use_GPU);
     [P, S] = selection(P,E,p,e,use_GPU);
-    K(i,1) = sum(S)/p;
+    K(1,1) = sum(S)/p;
     if e ~= 0
-        K(i,2) = S(1); % best
+        K(1,2) = S(1); % best
     end
-    plot(K(:,1),'b.'); drawnow
+    plot(i,K(:,1),'b.'); drawnow
     hold on
     if e ~= 0
-        plot(K(:,2),'r.'); drawnow
+        plot(i,K(:,2),'r.'); drawnow
     end
 end
 hold off;
