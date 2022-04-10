@@ -1,13 +1,25 @@
-function value = recombination(P, n)
+function value = recombination(P, n,use_GPU)
 %% Recombination of the genetic algorithm 
 % only a one-point recombination was implemented here
 
     % P = population
     % n = number of chromosomes to be crossedover
+    % use_GPU = define if the computation has to be performed using the GPU
+
+    
+
     cutting_point = 0; % index of the cutting point
     parents_index = 0; % index of the 2 parents chosen
+    
     [population_size  nb_of_genes] = size(P);
-    Z = zeros(2*n,nb_of_genes); % initialize the output matrix (preallocation of the memory)
+    
+    % initialize the output matrix (preallocation of the memory)
+    if use_GPU
+        Z = gpuArray(zeros(2*n,nb_of_genes)); 
+    else
+        Z = zeros(2*n,nb_of_genes);
+    end
+
     for i = 1:n
         parents_index = randi(population_size,1,2); % select randomly two parents
         % Assure that we are note taking twice the same parent

@@ -1,16 +1,28 @@
-function [value1, value2] = selection(P,F,p,e)
+function [value1, value2] = selection(P,F,p,e,use_GPU)
+%% Function to select the individuals to reproduce for the next generation
+% value 1 are the genes set of the individuals selected, value 2 are the values of the objective function with the selected
+% individuals
+
 % P = Population
 % F = fitness value
 % p = population size
 % e = number of elite individuals to select for the next generation
+% use_GPU = define if the computation has to be performed using the GPU
+    
+% if the GPU is used create GPU arrays, preallocation 
 [X, Y] = size(P);
-Y1 = zeros(p,Y);
+if use_GPU
+    Y1 = zeros(p,Y);
+    Fn = gpuArray;
+else
+    Y1 = zeros(p,Y);
+end
 
 % We check that no chromosome has a negative fitness, if it is the case we
 % set its fitness to zero
 for j = 1:length(F)
     if F(j)<0
-        F(j) = 0
+        F(j) = 0;
     end
 end
 
@@ -25,23 +37,20 @@ for i = 1:e
 end
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%CONTINUE ICI %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 D = F/sum(F); % Determine selection probability
 E = cumsum(D); % Determine cumulative probability
-N = rand(1); % Generate a vector containing normalized random numbers
-d1 = 1;
-d2 = e;
-while d2 <= p-e
-    if N <= E(d1)
-        Y1(d2+1,:) = P(d1,:);
-        Fn(d2+1) = F(d1);
-        N = rand(1);
-        d2 = d2 +1;
-        d1 = 1;
+rand_value = rand(1); % Generate a random number
+k = 1;
+l = e;
+while l <= p-e 
+    if rand_value <= E(k) % compare rand_value with the selection probability of each individuals (minus e individuals for the elite selection)
+        Y1(l+1,:) = P(k,:); % add the selected individual at the end of Y1 
+        Fn(l+1) = F(k);
+        rand_value = rand(1); % get a new random value
+        l = l +1;
+        k = 1;
     else
-        d1 = d1 +1;
+        k= k +1;
     end
 end
 value1 = Y1;
