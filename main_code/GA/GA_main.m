@@ -7,11 +7,11 @@ close all;
 clc
 
 %-----------------------------------------------------------------------
-p = 500; % population size
+p = 250; % population size
 c = 10; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
-total_generations = 5000; % total number of generations
+total_generations = 500; % total number of generations
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1];
 precisions = [4,4,4];
