@@ -77,7 +77,13 @@ best_individual=P(row(1),:);
 best_yield = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU);
 best_price = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@price_function,use_GPU);
 best_values = get_values(best_individual,lowerLimits,higherLimits,genes);
+% rescale the values
+best_values(1) = 3-(1-best_values(1))*3/2;
+best_values(2) = 60-(1-best_values(2))*30/2;
+best_values(3) = 3-(1-best_values(3))*3/2;
 
 
-disp(sprintf('The highest value found of the objective function was %d, \n this value gave a yield of %d and the price reaction for this set of parameters is %d. \n The set of parameters are: x = %d, y =%d, z=%d ',...
-    best_obj,best_yield,best_price,best_values(1),best_values(2),best_values(3)))
+
+
+disp(sprintf('The highest value found of the objective function was %.4f, \n this value gave a yield of %.4f %% and the price reaction for this set of parameters is %.4f CHF \n The set of parameters are: x = %.4f mMol, y = %.4f °C, z = %.4f mMol',...
+    best_obj,best_yield,best_price, best_values(1), best_values(2), best_values(3)))

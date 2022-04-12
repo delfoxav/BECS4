@@ -6,7 +6,7 @@ function result = get_values(P, lowerLimits, higherLimits, genes)
     % genes = vector of genes used for each variable
 
     result=[];
-    [x1,y1] = size(P)
+    [x1,y1] = size(P);
     tmp = zeros(size(lowerLimits)); %preallocation
     values = zeros(size(lowerLimits)); %preallocation
 
