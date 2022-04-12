@@ -2,7 +2,6 @@ function value = evaluate_result(lowerLimits, higherLimits, genes, func)
 
  tmp = zeros(size(lowerLimits));
     values = zeros(size(lowerLimits));
-    disp(x1)
     for i = 1: x1
         for j = 1: length(genes)
 
