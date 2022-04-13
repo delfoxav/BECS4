@@ -6,6 +6,7 @@ clear;
 close all;
 clc
 
+%% Definition of the Hyperparameters
 %-----------------------------------------------------------------------
 p = 200; % population size
 c = 20; % number of pair of chromosomes to be crossovered
@@ -19,6 +20,7 @@ use_GPU = false; % select if the computation has to be done on the GPU or not
 ILM_DHC = true; % Select if a Dynamic Increasing of Low Mutation/Decreasing of High Crossover should be applied
 %-----------------------------------------------------------------------
 
+%% Creation of the live plot
 figure('Name','Genetic Algorithm training')
 title('Genetic Algorithm training')
 xlabel('Generation')
@@ -34,6 +36,8 @@ k = 0;
 if use_GPU
     K=gpuArray;
 end
+
+%% Running of the algorithm
     
 for i = 1:total_generations
     
@@ -41,17 +45,17 @@ for i = 1:total_generations
     if ILM_DHC
         % maximize the number of mutation to 5% of the population
         if m < p*5/100
-            m = floor((i/total_generations)*p)
+            m = floor((i/total_generations)*p);
         end
-        c = floor((1 - (i/total_generations))*p)
+        c = floor((1 - (i/total_generations))*p);
     end
 
-    Cr = crossover(P,c,use_GPU); % perform the crossovers 
+    Cr = crossover(P,c,n_cut,use_GPU); % perform the crossovers 
     Mu = mutation(P,m,use_GPU); % perform the mutation
-    P(p+1:p+2*c,:) = Cr; % add the crossovers to the population
-    P(p+2*c+1:p+2*c+m,:) = Mu; % add the mutation to the population
+    P(p+1:p+2*c,:) = Cr; % add the crossovers at the end of population
+    P(p+2*c+1:p+2*c+m,:) = Mu; % add the mutation at the end of population
     E = evaluation(P,lowerLimits,higherLimits,genes,@objective_function,@price_function,@yield_check_function,use_GPU); % evaluate the cost function
-    [P, S] = selection(P,E,p,e,use_GPU); % select the individuals of the population
+    [P, S] = selection(P,E,p,e,use_GPU); % select the individuals of the population reduce the population to a size of p
     K(i,1) = sum(S)/p; % compute the average result of the generation
     if e ~= 0
         K(i,2) = S(1); % store the best individual of the generation
@@ -67,33 +71,35 @@ end
 %legend('average','maximum')
 hold off;
 
+
+%% Draw the output graphs
+
 % draw the Price function of the last population
-figure('Name','Price function last population')
+figure('Name','Price, Yield and Objective function of the last population')
+subplot(2,2,1);
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU),'cyan')
 title('Price function last population')
 xlabel('Individual')
 ylabel('Cost Value [CHF]')
-hold on
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU),'cyan')
-hold off
+
 
 % draw the yield function of the last population
-figure('Name','yield function last population')
+subplot(2,2,2);
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU),'black')
 title('yield function last population')
 xlabel('Individual')
 ylabel('yield Value [%]')
 hold on
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU),'black')
+yline(60,'red');
 hold off
 
-% draw the objective function of the last population
-figure('Name','objective function last population')
+subplot(2,2,[3,4]);
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU),'green')
 title('objective function last population')
 xlabel('Individual')
 ylabel('objective function Value')
-hold on
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU),'green')
-hold off
 
+%% Show the results in the command line
 
 % Get the best result
 best_obj = max(S); %Should be at position 1 but isn't the case if no elite individuals are stored
