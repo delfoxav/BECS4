@@ -69,13 +69,13 @@ k = 1;
 l = e;
 while l <= p-e 
     if rand_value <= E(k) % compare rand_value with the selection probability of each individuals (minus e individuals for the elite selection)
-        Y1(l+1,:) = P(k,:); % add the selected individual at the end of Y1 
-        Fn(l+1) = F(k);
+        Y1(l+e,:) = P(k,:); % add the selected individual at the end of Y1 
+        Fn(l+e) = F(k);
         rand_value = rand(1); % get a new random value
-        l = l +1;
+        l = l +1; % increment l
         k = 1;
     else
-        k= k +1;
+        k= k +1; % increment k
     end
 end
 value1 = Y1;

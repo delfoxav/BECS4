@@ -11,11 +11,12 @@ p = 200; % population size
 c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
-total_generations = 200; % total number of generations
+total_generations = 5000; % total number of generations
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1];
 precisions = [4,2,6];
 use_GPU = false; % select if the computation has to be done on the GPU or not
+ILM_DHC = true; % Select if a Dynamic Increasing of Low Mutation/Decreasing of High Crossover should be applied
 %-----------------------------------------------------------------------
 
 figure('Name','Genetic Algorithm training')
@@ -35,6 +36,16 @@ if use_GPU
 end
     
 for i = 1:total_generations
+    
+    % apply ILM_DHC
+    if ILM_DHC
+        % maximize the number of mutation to 5% of the population
+        if m < p*5/100
+            m = floor((i/total_generations)*p)
+        end
+        c = floor((1 - (i/total_generations))*p)
+    end
+
     Cr = crossover(P,c,use_GPU); % perform the crossovers 
     Mu = mutation(P,m,use_GPU); % perform the mutation
     P(p+1:p+2*c,:) = Cr; % add the crossovers to the population
@@ -50,7 +61,8 @@ for i = 1:total_generations
     if e ~= 0
         plot(K(:,2),'r.','DisplayName','maximum of generation'); drawnow
     end
-    legend('Location','southeast','AutoUpdate','off'); % Change the position of the legend and stop updating it 
+    legend('Location','southeast','AutoUpdate','off'); % Change the position of the legend and stop updating it
+    
 end
 %legend('average','maximum')
 hold off;
