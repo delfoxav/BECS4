@@ -1,4 +1,4 @@
-
+ 
 function output = encoding(a,b,e,x,base)
 
 %% Compute the binary encoding of the value x in the interval [a,b] with

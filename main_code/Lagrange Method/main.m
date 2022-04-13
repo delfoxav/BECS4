@@ -7,7 +7,7 @@ hold off;
 % x = TOBECOMPLETED
 % y = TOBECOMPLETED
 % z = TOBECOMPLETED
-price_func = @(x,y,z) 87.6 + 6.41*x + 2.53*y + 9.29*z + 3.39*x^2 - 16.64*y^2 -4.84*z^2 - 3.43*x*y - 3.63*y*z
+price_func = @(x,y,z) 87.6 + 6.41*x + 2.53*y + 9.29*z + - 3.39*x^2 - 16.64*y^2 -4.84*z^2 - 3.43*x*y - 3.63*y*z
 
 %% Definition of the Constraints
 
