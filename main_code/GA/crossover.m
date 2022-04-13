@@ -1,9 +1,10 @@
-function value = recombination(P, n,use_GPU)
+function value = recombination(P, n,n_cutting,use_GPU)
 %% Recombination of the genetic algorithm 
-% only a one-point recombination was implemented here
+% Implementation of a k point recombination
 
     % P = population
     % n = number of chromosomes to be crossedover
+    % n = number of cutting point
     % use_GPU = define if the computation has to be performed using the GPU
 
     
@@ -28,11 +29,16 @@ function value = recombination(P, n,use_GPU)
         end
         Parent_1 = P(parents_index(1),:); % First_parent
         Parent_2 = P(parents_index(2),:); % Second_parent
-        cutting_point = 1+randi(nb_of_genes-1); % random cutting point
-        % Invert the the genes after the cutting point of parent 1 and
-        % parent 2
-        [Parent_1(1,cutting_point:nb_of_genes),Parent_2(1,cutting_point:nb_of_genes)] = deal(Parent_2(1,cutting_point:nb_of_genes),Parent_1(1,cutting_point:nb_of_genes));
+
+        for j = 1:n_cutting % loop over the number of cutting to perform a k point recombination
+
+            cutting_point = 1+randi(nb_of_genes-1); % random cutting point
+            % Invert the genes after the cutting point of parent 1 and
+            % parent 2
+            [Parent_1(1,cutting_point:nb_of_genes),Parent_2(1,cutting_point:nb_of_genes)] = deal(Parent_2(1,cutting_point:nb_of_genes),Parent_1(1,cutting_point:nb_of_genes));
         
+        end
+
         Z(2*i-1,:) = Parent_1; % add the recombined Parent 1 to the output matrix
         Z(2*i,:) = Parent_2; % add the recombined Parent 2 to the output matrix
     end
