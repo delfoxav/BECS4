@@ -47,7 +47,8 @@ for i = 1:total_generations
         if m < p*5/100
             m = floor((i/total_generations)*p);
         end
-        c = floor((1 - (i/total_generations))*p);
+         % maximize the number of crossover to 70% of the population
+        c = floor((0.7 - (i/total_generations))*p);
     end
 
     Cr = crossover(P,c,n_cut,use_GPU); % perform the crossovers 
