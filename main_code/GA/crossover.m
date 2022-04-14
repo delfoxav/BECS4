@@ -6,8 +6,29 @@ function value = recombination(P, n,n_cutting,use_GPU)
     % n = number of chromosomes to be crossedover
     % n = number of cutting point
     % use_GPU = define if the computation has to be performed using the GPU
-
     
+    % Checks the type of the inputs
+    if ~isnumeric(P)
+        error("P : Double expected but %s was given ",class(P));
+    end
+    if ~isnumeric(n)
+        error("n : Double expected but %s was given ",class(n));
+    end
+    if ~isnumeric(n_cutting)
+        error("n_cutting: Double expected but %s was given",class(n_cutting));
+    end
+
+    if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
+    end
+
+% Checks if n is positve
+    if n<0
+        error("n : must be positve")
+    end
+    if n_cutting<0
+        error("n : must be positve")
+    end
 
     cutting_point = 0; % index of the cutting point
     parents_index = 0; % index of the 2 parents chosen

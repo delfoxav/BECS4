@@ -8,7 +8,7 @@ clc
 
 %% Definition of the Hyperparameters
 %-----------------------------------------------------------------------
-p = 200; % population size
+p = 5; % population size
 c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
@@ -49,7 +49,9 @@ for i = 1:total_generations
             m = floor((i/total_generations)*p);
         end
          % maximize the number of crossover to 70% of the population
-        c = floor((0.7 - (i/total_generations))*p);
+         if c > p*70/100
+            c = floor((0.7 - (i/total_generations))*p);
+         end
     end
 
     Cr = crossover(P,c,n_cut,use_GPU); % perform the crossovers 
