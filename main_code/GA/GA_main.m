@@ -17,8 +17,9 @@ n_cut = 1;
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1];
 precisions = [4,2,6];
-use_GPU = false; % select if the computation has to be done on the GPU or not
+use_GPU = false; % select if the computation has to be done on the GPU or not 
 ILM_DHC = true; % Select if a Dynamic Increasing of Low Mutation/Decreasing of High Crossover should be applied
+realtime = false; % Select if the graph should be display in real time or not. Setting this value to false will drastically reduce the computation time.
 %-----------------------------------------------------------------------
 
 %% Creation of the live plot
@@ -37,7 +38,9 @@ k = 0;
 if use_GPU
     K=gpuArray;
 end
-
+tic;
+p1 = plot(0,0,'.b','DisplayName','average of generation');
+p2 = plot(0,0,'.r','DisplayName','maximum of generation');
 %% Running of the algorithm
     
 for i = 1:total_generations
@@ -49,7 +52,9 @@ for i = 1:total_generations
             m = floor((i/total_generations)*p);
         end
          % maximize the number of crossover to 70% of the population
-        c = floor((0.7 - (i/total_generations))*p);
+         if c > p*70/100
+            c = floor((0.7 - (i/total_generations))*p);
+         end
     end
 
     Cr = crossover(P,c,n_cut,use_GPU); % perform the crossovers 
@@ -62,44 +67,54 @@ for i = 1:total_generations
     if e ~= 0
         K(i,2) = S(1); % store the best individual of the generation
     end
-    plot(K(:,1),'b.','DisplayName','average of generation'); drawnow
-    hold on
+    if realtime
+        set(p1, 'XData', 1:i, 'YData',K(:,1)); drawnow
+    end
+    hold on;
     if e ~= 0
-        plot(K(:,2),'r.','DisplayName','maximum of generation'); drawnow
+        if realtime
+            set(p2, 'XData', 1:i, 'YData',K(:,2)); drawnow
+        end
     end
     legend('Location','southeast','AutoUpdate','off'); % Change the position of the legend and stop updating it
     
 end
-%legend('average','maximum')
+
+%Draw the evolution at the end of the computation
+if ~realtime
+    set(p1, 'XData', 1:i, 'YData',K(:,1));
+     set(p2, 'XData', 1:i, 'YData',K(:,2));
+end
+
 hold off;
 
 
 %% Draw the output graphs
 
 % draw the Price function of the last population
-figure('Name','Price, Yield and Objective function of the last population')
+figure('Name','Price, Yield and Objective function of the last population');
 subplot(2,2,1);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU),'cyan')
-title('Price function last population')
-xlabel('Individual')
-ylabel('Cost Value [CHF]')
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU),'cyan');
+title('Price function last population');
+xlabel('Individual');
+ylabel('Cost Value [CHF]');
 
 
 % draw the yield function of the last population
 subplot(2,2,2);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU),'black')
-title('yield function last population')
-xlabel('Individual')
-ylabel('yield Value [%]')
-hold on
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU),'black');
+title('yield function last population');
+xlabel('Individual');
+ylabel('yield Value [%]');
+hold on;
 yline(60,'red');
-hold off
+hold off;
 
 subplot(2,2,[3,4]);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU),'green')
-title('objective function last population')
-xlabel('Individual')
-ylabel('objective function Value')
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU),'green');
+title('objective function last population');
+xlabel('Individual');
+ylabel('objective function Value');
 
 %% Show the results in the command line
 
@@ -124,3 +139,4 @@ text = ['The highest value found of the objective function was %.2f,' ...
     ' °C, z = %.',num2str(precisions(3)),'f mMol. \n'];
 
 fprintf(text, best_obj,best_yield,best_price, best_values(1), best_values(2), best_values(3));
+toc;
