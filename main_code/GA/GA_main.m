@@ -139,4 +139,4 @@ text = ['The highest value found of the objective function was %.2f,' ...
     ' °C, z = %.',num2str(precisions(3)),'f mMol. \n'];
 
 fprintf(text, best_obj,best_yield,best_price, best_values(1), best_values(2), best_values(3));
-toc
+toc;
