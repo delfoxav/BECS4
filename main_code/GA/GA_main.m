@@ -1,3 +1,9 @@
+% Lecture: BECS4: Optimisation Methods
+% work: Optimization of a chemical reaction on a catalytic bed
+% date: 18.04.2022
+% authors: Ospice Koudou % Xavier Delfosse
+
+
 %% Genetic algorithm
 % Implementation of the genetic algorithm, maximize the objective function
 
@@ -13,11 +19,11 @@ c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
 n_cut = 1; % number of cutting points for the recombinations
-total_generations = 2000; % total number of generations
+total_generations = 5000; % total number of generations
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
-higherLimits = [1,1,1];
-precisions = [4,2,6];
-use_GPU = false; % select if the computation has to be done on the GPU or not 
+higherLimits = [1,1,1]; % each value correspond to one parameter of the objective function
+precisions = [4,2,6]; 
+use_GPU = false; % select if the computation has to be done on the GPU or not (most of the time this is a bad idea)- 
 ILM_DHC = true; % Select if a Dynamic Increasing of Low Mutation/Decreasing of High Crossover should be applied
 realtime = false; % Select if the graph should be display in real time or not. Setting this value to false will drastically reduce the computation time.
 %-----------------------------------------------------------------------
