@@ -41,6 +41,12 @@ finally the objective function was defined as:
 
 f = g-h
 
+with:
+
+x = catalyst concentration [mmol/L]
+y = Temperature [°C]
+z = reagent concentration [mol/L]
+
 
 Le projet globalement consiste A produire une molécule pour un client. La réaction se fait sur un lit catalytic dans un microréacteur
 Nous en tant sous-traitant, c'est de conduire une réaction efficace qui donne un bon rendement (minimum 60% exigé par le client)

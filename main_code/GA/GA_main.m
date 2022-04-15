@@ -14,15 +14,16 @@ clc
 
 %% Definition of the Hyperparameters
 %-----------------------------------------------------------------------
-p = 200; % population size
+p = 20; % population size
 c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
 n_cut = 1; % number of cutting points for the recombinations
-total_generations = 5000; % total number of generations
+total_generations = 50; % total number of generations
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1]; % each value correspond to one parameter of the objective function
 precisions = [4,2,6]; 
+tamb = 23; % ambiant temperature
 use_GPU = false; % select if the computation has to be done on the GPU or not (most of the time this is a bad idea)- 
 ILM_DHC = true; % Select if a Dynamic Increasing of Low Mutation/Decreasing of High Crossover should be applied
 realtime = false; % Select if the graph should be display in real time or not. Setting this value to false will drastically reduce the computation time.
@@ -67,7 +68,7 @@ for i = 1:total_generations
     Mu = mutation(P,m,use_GPU); % perform the mutation
     P(p+1:p+2*c,:) = Cr; % add the crossovers at the end of population
     P(p+2*c+1:p+2*c+m,:) = Mu; % add the mutation at the end of population
-    E = evaluation(P,lowerLimits,higherLimits,genes,@objective_function,@price_function,@yield_check_function,use_GPU); % evaluate the cost function
+    E = evaluation(P,lowerLimits,higherLimits,genes,@objective_function,@price_function,@yield_check_function,use_GPU, tamb); % evaluate the cost function
     [P, S] = selection(P,E,p,e,use_GPU); % select the individuals of the population reduce the population to a size of p
     K(i,1) = sum(S)/p; % compute the average result of the generation
     if e ~= 0
@@ -100,7 +101,7 @@ hold off;
 % draw the Price function of the last population
 figure('Name','Price, Yield and Objective function of the last population');
 subplot(2,2,1);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU),'cyan');
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@price_function,use_GPU,tamb),'cyan');
 title('Price function last population');
 xlabel('Individual');
 ylabel('Cost Value [CHF]');
@@ -108,7 +109,7 @@ ylabel('Cost Value [CHF]');
 
 % draw the yield function of the last population
 subplot(2,2,2);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU),'black');
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU,tamb),'black');
 title('yield function last population');
 xlabel('Individual');
 ylabel('yield Value [%]');
@@ -117,7 +118,7 @@ yline(60,'red');
 hold off;
 
 subplot(2,2,[3,4]);
-plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU),'green');
+plot(evaluate_function(P,lowerLimits,higherLimits,genes,@objective_function,use_GPU,tamb),'green');
 title('objective function last population');
 xlabel('Individual');
 ylabel('objective function Value');
@@ -128,8 +129,8 @@ ylabel('objective function Value');
 best_obj = max(S); %Should be at position 1 but isn't the case if no elite individuals are stored
 [row,col] = find(S == best_obj); %Should be at position 1 by definition but just in case
 best_individual=P(col(1),:);
-best_yield = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU);
-best_price = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@price_function,use_GPU);
+best_yield = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@yield_check_function,use_GPU,tamb);
+best_price = evaluate_function(best_individual,lowerLimits,higherLimits,genes,@price_function,use_GPU,tamb);
 best_values = get_values(best_individual,lowerLimits,higherLimits,genes);
 
 % rescale the values
@@ -137,12 +138,19 @@ best_values(1) = rescaling(0,3,best_values(1));
 best_values(2) = rescaling(30,60,best_values(2));
 best_values(3) = rescaling(0,3,best_values(3));
 
+% calculate price of each parameters
+price_value(1) = best_values(1)*10;
+price_value(2) = (best_values(2)-tamb)*0.2;
+price_value(3) = best_values(3)*22;
+
+
+
 %Create Output text
 text = ['The highest value found of the objective function was %.2f,' ...
     ' \n this value gave a yield of %.2f %% and the price reaction for this' ...
     ' set of parameters is %.2f CHF \n The set of parameters are:' ...
     ' x = %.',num2str(precisions(1)),'f mMol, y = %.',num2str(precisions(2)),'f' ...
-    ' °C, z = %.',num2str(precisions(3)),'f mMol. \n'];
+    ' °C, z = %.',num2str(precisions(3)),'f Mol. \n The cost of each parameters are x = %.2f CHF, y = %.2f CHF and z = %.2f CHF \n \n'];
 
-fprintf(text, best_obj,best_yield,best_price, best_values(1), best_values(2), best_values(3));
+fprintf(text, best_obj,best_yield,best_price, best_values(1), best_values(2), best_values(3), price_value(1), price_value(2), price_value(3));
 toc;

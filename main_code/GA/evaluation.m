@@ -1,4 +1,4 @@
-function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricefunc, yieldfunc, use_GPU)
+function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricefunc, yieldfunc, use_GPU, tamb)
 %% Evaluation of the Genetic algoritm results
 % return the values corresponding to the individuals of the populations
     % P = population
@@ -9,7 +9,8 @@ function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricef
     % pricefunc = function showing the price of the reaction
     % yieldfunc = function showing the yield of the reaction
     % use_GPU = define if the computation has to be performed using the GPU
-    
+    % tamb = ambiant temperature
+
     % Checks the type of the inputs
     if ~isnumeric(P)
         error("P : Double expected but %s was given ",class(P))
@@ -80,8 +81,8 @@ function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricef
         %Having a yield higher than 60% is mandatory, if the yield is
         %lower, the fitness is set to 0. We also want to spend less than 1
         %CHF per % of yield
-        if yieldfunc(values) >= 60 && pricefunc(values) <= yieldfunc(values) 
-            H(1,i) = objfunc(values);
+        if yieldfunc(values, tamb) >= 60 && pricefunc(values, tamb) <= yieldfunc(values, tamb) 
+            H(1,i) = objfunc(values, tamb);
         else
             H(1,i) = 0;
         end

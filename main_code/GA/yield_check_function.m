@@ -1,11 +1,17 @@
-function f = yield_function(x)
+function f = yield_function(x, tamb)
 %% Checks if the yield is higher than 60%
 % Have a look at readme.md to know what the different parameters are
+% tamb = ambiant temperature
 
 % Checks input parameter
 if ~isnumeric(x)
     error("Double expected but %s was given ",class(x))
 end
+
+if ~isnumeric(tamb)
+    error("Double expected but %s was given ",class(tamb))
+end
+
 
 if length(x)~=3
     error("Input parameter must have a size of 3, %d was given",length(x))

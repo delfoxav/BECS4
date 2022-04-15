@@ -1,4 +1,4 @@
-function value = evaluate_function(P, lowerLimits, higherLimits, genes, func, use_GPU)
+function value = evaluate_function(P, lowerLimits, higherLimits, genes, func, use_GPU, tamb)
 %% Evaluation of any function result for  the Genetic algoritm 
 % return the values corresponding to the individuals of the populations
 % takes a set of genes in binary as input
@@ -8,6 +8,7 @@ function value = evaluate_function(P, lowerLimits, higherLimits, genes, func, us
     % genes = vector of genes used for each variable
     % func = function to evaluate
     % use_GPU = define if the computation has to be performed using the GPU
+    % tamb = ambiant temperature
 
 
 
@@ -34,6 +35,6 @@ function value = evaluate_function(P, lowerLimits, higherLimits, genes, func, us
             values(j) = lowerLimits(j) + tmp(j) *(higherLimits(j) - lowerLimits(j))/(2^(genes(j))-1); % scale the number in the value range
             b = a+1;
         end    
-        H(1,i) = func(values);
+        H(1,i) = func(values, tamb);
     end
     value = H;
