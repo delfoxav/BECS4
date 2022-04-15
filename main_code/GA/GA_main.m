@@ -13,6 +13,7 @@ c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
 total_generations = 500; % total number of generations
+n_cut = 1;
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1];
 precisions = [4,2,6];
