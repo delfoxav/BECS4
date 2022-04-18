@@ -15,7 +15,7 @@ les critères sont :
 - Coût du réactif : 22 CHF / mol /l
 - Température entre 30 et 60 °C
 - concentration de catalyseur entre 0 et 3 mMol
-- concentration de réactif entre 0 et 3 mMol
+- concentration de réactif entre 0 et 3 Mol/L
 Avant de contruire notre model, on a effectué un DoE afin d'obtenir des data necessaires. Dans le DoE, on etudier l'effet des paramètres 
 sur le système mais aussi l'effet de leur intéraction. Une analyse Anova et un normal probability plot nous ont permis d'identifier 
 les paramètres différents qui ont une influence. Ce sont :
