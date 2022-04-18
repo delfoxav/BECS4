@@ -18,8 +18,13 @@ p = 20; % population size
 c = 20; % number of pair of chromosomes to be crossovered
 m = 5; % number of pair of chromosomes to be mutated
 e = 1; % number of elite individuals to select at each generation
+<<<<<<< HEAD
 n_cut = 1; % number of cutting points for the recombinations
 total_generations = 50; % total number of generations
+=======
+total_generations = 500; % total number of generations
+n_cut = 1;
+>>>>>>> 5da56e2058c043b18e7e93359064cc214a18b288
 lowerLimits = [-1,-1,-1]; % the parameters were centrized arround -1 and 1
 higherLimits = [1,1,1]; % each value correspond to one parameter of the objective function
 precisions = [4,2,6]; 
