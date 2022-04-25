@@ -53,7 +53,6 @@ p2 = plot(0,0,'.r','DisplayName','maximum of generation');
 %% Running of the algorithm
     
 for i = 1:total_generations
-    i
     % apply ILM_DHC
     if ILM_DHC
         % maximize the number of mutation to 5% of the population
