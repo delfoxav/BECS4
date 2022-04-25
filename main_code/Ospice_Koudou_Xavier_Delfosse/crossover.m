@@ -10,7 +10,7 @@ function value = recombination(P, n,n_cutting,use_GPU)
 
     % P = population
     % n = number of chromosomes to be crossedover
-    % n = number of cutting point
+    % n_cutting = number of cutting point
     % use_GPU = define if the computation has to be performed using the GPU
     
     % Checks the type of the inputs
@@ -33,7 +33,7 @@ function value = recombination(P, n,n_cutting,use_GPU)
         error("n : must be positve")
     end
     if n_cutting<0
-        error("n : must be positve")
+        error("n_cutting : must be positve")
     end
 
     cutting_point = 0; % index of the cutting point

@@ -11,6 +11,20 @@ function values = get_values(P, lowerLimits, higherLimits, genes)
     % higherLimits = vector of the higher bound on each variable
     % genes = vector of genes used for each variable
 
+    % Checks the type of the inputs
+    if ~isnumeric(P)
+        error("P : Double expected but %s was given ",class(P))
+    end
+    if ~isnumeric(lowerLimits)
+        error("lowerLimits : Double expected but %s was given ",class(lowerLimits));
+    end
+    if ~isnumeric(higherLimits)
+        error("higherLimits : Double expected but %s was given ",class(higherLimits));
+    end
+    if ~isnumeric(genes)
+        error("genes : Double expected but %s was given ",class(genes));
+    end
+
     result=[];
     [x1,y1] = size(P);
     tmp = zeros(size(lowerLimits)); %preallocation

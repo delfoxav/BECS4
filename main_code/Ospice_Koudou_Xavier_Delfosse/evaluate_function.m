@@ -14,8 +14,29 @@ function value = evaluate_function(P, lowerLimits, higherLimits, genes, func, us
     % func = function to evaluate
     % use_GPU = define if the computation has to be performed using the GPU
     % tamb = ambiant temperature
-
-
+    
+    % Checks the type of the inputs
+    if ~isnumeric(P)
+        error("P : Double expected but %s was given ",class(P))
+    end
+    if ~isnumeric(lowerLimits)
+        error("lowerLimits : Double expected but %s was given ",class(lowerLimits));
+    end
+    if ~isnumeric(higherLimits)
+        error("higherLimits : Double expected but %s was given ",class(higherLimits));
+    end
+    if ~isnumeric(genes)
+        error("genes : Double expected but %s was given ",class(genes));
+    end
+    if ~isa(func,'function_handle')
+        error("func : function handle expected but %s was given " ,class(func));
+    end
+    if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
+    end
+    if ~isnumeric(P)
+        error("tamb : Double expected but %s was given ",class(tamb))
+    end
 
     [x1, y1] = size(P);
     

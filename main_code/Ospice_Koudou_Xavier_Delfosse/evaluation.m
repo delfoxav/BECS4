@@ -43,7 +43,9 @@ function value = evaluation(P, lowerLimits, higherLimits, genes, objfunc, pricef
         error("Lowerlimts (%d) , Higherlimits (%d) and genes (%d) must have the same sizes.", ...
             length(lowerLimits), length(higherLimits), length(genes));
     end
-    
+    if ~isnumeric(tamb)
+        error("tamb : Double expected but %s was given ",class(tamb));
+    end
     % Checks if the lowerLimits is lower than the higherLimits, the type of
     % the values and if all the precisions are positives
     for i=1:length(lowerLimits)

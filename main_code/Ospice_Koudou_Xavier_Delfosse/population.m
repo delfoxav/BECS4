@@ -28,6 +28,9 @@ function [value,N_genes] = population(n, lowerLimits, higherLimits, precisions,u
     if ~isnumeric(precisions)
         error("precisions : Double expect but %s was given ",class(precisions))
     end
+     if ~islogical(use_GPU)
+        error("use_GPU : boolean expected but %s was given " ,class(use_GPU));
+    end
 
     % Checks if each vector has the same size
     if length(lowerLimits) ~= length(higherLimits) || length(higherLimits) ...
